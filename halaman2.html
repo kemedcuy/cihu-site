@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Halaman 2 - Nembak Cewek</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #d9a8f7;
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      transition: background-color 0.5s ease;
+      position: relative;
+    }
+
+    #text {
+      font-size: 2em;
+      text-align: center;
+      max-width: 80%;
+      line-height: 1.5;
+      margin-bottom: 50px;
+      min-height: 3em;
+    }
+
+    .letter {
+      opacity: 0;
+      display: inline-block;
+      transform: translateY(10px);
+      animation: muncul 0.3s forwards ease-out;
+    }
+
+    @keyframes muncul {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .btn-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .btn-wrapper.show {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .btn-container {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .btn-choice {
+      position: relative;
+      font-size: 1.5em;
+      border: none;
+      color: white;
+      cursor: pointer;
+      padding: 0.5em 1.5em;
+      border-radius: 14px;
+      user-select: none;
+      outline: none;
+      transition: transform 0.2s ease, color 0.3s ease, background-color 0.4s ease;
+      min-width: 120px;
+      height: 64px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      line-height: 1;
+    }
+
+    #btnMau {
+      background-color: #f78fd1;
+    }
+
+    #btnEngga {
+      background-color: #bbb3c9;
+    }
+
+    .btn-choice:hover:not(:disabled) {
+      transform: scale(1.05);
+    }
+
+    .btn-choice:disabled {
+      cursor: default;
+      opacity: 0.8;
+    }
+
+    .love-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      font-size: 3em;
+      pointer-events: none;
+      user-select: none;
+      transition: transform 0.4s ease, opacity 0.3s ease;
+      opacity: 0;
+    }
+
+    .btn-choice.love .btn-text {
+      visibility: hidden;
+    }
+
+    .btn-choice.love .love-icon {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+    }
+
+    #btnKirim {
+      font-size: 1.5em;
+      background: #b36ac0;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      padding: 12px 40px;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.3s ease, opacity 0.4s ease;
+      min-width: 200px;
+      margin-top: 20px;
+      visibility: hidden;
+      opacity: 0;
+    }
+
+    #btnKirim.show {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    #btnKirim:hover {
+      filter: brightness(1.1);
+    }
+
+    .emoji-float {
+      position: absolute;
+      bottom: 0;
+      font-size: 24px;
+      pointer-events: none;
+      animation: floatUp 3s linear forwards;
+      z-index: 9999;
+    }
+
+    @keyframes floatUp {
+      0% {
+        opacity: 0;
+        transform: translateY(0) scale(1);
+      }
+      30% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-120vh) scale(1.5);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="text"></div>
+
+  <div class="btn-wrapper" id="btnWrapper">
+    <div class="btn-container">
+      <button id="btnMau" class="btn-choice">
+        <span class="btn-text">MAU</span>
+        <span class="love-icon">❤️</span>
+      </button>
+      <button id="btnEngga" class="btn-choice">
+        <span class="btn-text">Engga</span>
+        <span class="love-icon">💔</span>
+      </button>
+    </div>
+
+    <button id="btnKirim">Kirim</button>
+  </div>
+
+  <script>
+    const textElement = document.getElementById("text");
+    const btnWrapper = document.getElementById("btnWrapper");
+    const btnMau = document.getElementById("btnMau");
+    const btnEngga = document.getElementById("btnEngga");
+    const btnKirim = document.getElementById("btnKirim");
+    let pilihan = null;
+
+    const kalimat = "Kamu mau jadi pacarku nggak?";
+
+    function tampilkanTeksPerHuruf(kalimat, callback) {
+      textElement.innerHTML = "";
+      const hurufArr = kalimat.split("");
+
+      hurufArr.forEach((huruf, i) => {
+        const span = document.createElement("span");
+        span.textContent = huruf === " " ? "\u00A0" : huruf;
+        span.classList.add("letter");
+        span.style.animationDelay = (i * 0.03) + "s";
+        textElement.appendChild(span);
+      });
+
+      const totalDurasi = hurufArr.length * 30 + 500;
+      setTimeout(callback, totalDurasi);
+    }
+
+    tampilkanTeksPerHuruf(kalimat, () => {
+      btnWrapper.classList.add("show");
+    });
+
+    function hujanEmoji(emoji = "❤️", durasi = 3000, interval = 100) {
+      const intervalId = setInterval(() => {
+        const span = document.createElement("span");
+        span.classList.add("emoji-float");
+        span.textContent = emoji;
+
+        const randomLeft = Math.random() * window.innerWidth;
+        span.style.left = `${randomLeft}px`;
+
+        document.body.appendChild(span);
+
+        setTimeout(() => {
+          span.remove();
+        }, 3000);
+      }, interval);
+
+      setTimeout(() => clearInterval(intervalId), durasi);
+    }
+
+    btnMau.addEventListener("click", () => {
+      pilihan = "mau";
+      btnMau.disabled = true;
+      btnEngga.disabled = false;
+      btnMau.classList.add("love");
+      btnEngga.classList.remove("love");
+
+      document.body.style.backgroundColor = "#f78fd1";
+      btnKirim.style.backgroundColor = "#d2619e";
+      btnKirim.textContent = "Kirim 😊";
+      btnKirim.classList.add("show");
+
+      hujanEmoji("❤️", 5000);
+    });
+
+    btnEngga.addEventListener("click", () => {
+      pilihan = "engga";
+      btnEngga.disabled = true;
+      btnMau.disabled = false;
+      btnEngga.classList.add("love");
+      btnMau.classList.remove("love");
+
+      const warnaEngga = "#806982";
+      document.body.style.backgroundColor = warnaEngga;
+      btnEngga.style.backgroundColor = warnaEngga;
+      btnKirim.style.backgroundColor = "#5f4e69";
+      btnKirim.textContent = "Kirim 😢";
+      btnKirim.classList.add("show");
+
+      hujanEmoji("😢", 5000);
+    });
+
+    btnKirim.addEventListener("click", () => {
+      if (!pilihan) {
+        alert("Pilih dulu jawabanmu!");
+        return;
+      }
+
+      const noHP = "6283806255881";
+      let pesan = "";
+
+      if (pilihan === "mau") {
+        pesan = "Aku mau banget jadi pacarku! ❤️";
+      } else {
+        pesan = "Maaf ya, aku belum bisa... 💔";
+      }
+
+      btnKirim.disabled = true;
+      btnKirim.textContent = "Mengirim...";
+
+      setTimeout(() => {
+        window.location.href = `https://wa.me/${noHP}?text=${encodeURIComponent(pesan)}`;
+      }, 300);
+    });
+  </script>
+
+</body>
+</html>
