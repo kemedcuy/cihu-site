@@ -1,32 +1,115 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-  <title>Download File Uhuy</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nembak Cewek</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 50px;
-      background-color: #f9f9f9;
-    }
-    a.download {
-      padding: 12px 24px;
-      background-color: #1d72b8;
+      margin: 0;
+      padding: 0;
+      background: #f8bbd0;
       color: white;
-      text-decoration: none;
-      border-radius: 8px;
-      font-size: 18px;
+      font-family: 'Poppins', sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      overflow: hidden;
     }
-    h1 {
-      margin-bottom: 20px;
+
+    #text {
+      font-size: 2em;
+      text-align: center;
+      max-width: 80%;
+      line-height: 1.5;
+    }
+
+    .letter {
+      opacity: 0;
+      display: inline-block;
+      transform: translateY(30px);
+      animation: muncul 0.5s forwards;
+    }
+
+    @keyframes muncul {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    #nextBtn {
+      margin-top: 40px;
+      padding: 12px 24px;
+      font-size: 1em;
+      border: none;
+      background: white;
+      color: #ec407a;
+      border-radius: 30px;
+      cursor: pointer;
+      visibility: hidden;
     }
   </style>
 </head>
 <body>
-  <h1>File Unduhan: uhuy.rar</h1>
-  <p>Klik tombol di bawah untuk mengunduh:</p>
-  <a class="download" href="https://github.com/kemedcuy/uhuy-site/raw/main/uhuy.rar" download>
-    Download uhuy.rar
-  </a>
+
+  <div id="text"></div>
+  <button id="nextBtn">?</button>
+
+  <script>
+    const teks = [
+      "Hai kamu...",
+      "Iya, kamu yang selalu bikin aku senyum sendiri...",
+      "Aku mau bilang sesuatu yang penting...",
+    ];
+
+    const textElement = document.getElementById("text");
+    const button = document.getElementById("nextBtn");
+    let index = 0;
+
+    function tampilkanTeksPerHuruf(kalimat, callback) {
+      textElement.innerHTML = "";
+
+      const hurufArr = kalimat.split("");
+
+      hurufArr.forEach((huruf, i) => {
+        const span = document.createElement("span");
+        span.textContent = huruf === " " ? "\u00A0" : huruf;
+        span.classList.add("letter");
+        span.style.animationDelay = (i * 0.05) + "s";
+        textElement.appendChild(span);
+      });
+
+      const totalDurasi = hurufArr.length * 50 + 1000;
+
+      setTimeout(() => {
+        callback();
+      }, totalDurasi);
+    }
+
+    function tampilkanSemuaTeks() {
+      if (index < teks.length) {
+        tampilkanTeksPerHuruf(teks[index], () => {
+          index++;
+          setTimeout(tampilkanSemuaTeks, 1500);
+        });
+      } else {
+        button.style.visibility = "visible";
+      }
+    }
+
+    tampilkanSemuaTeks();
+
+    button.addEventListener("click", () => {
+      const konfirmasi = confirm("Yakin mau tau? 😳");
+      if (konfirmasi) {
+        window.location.href = "halaman2.html";
+      }
+    });
+  </script>
+
 </body>
 </html>
+
